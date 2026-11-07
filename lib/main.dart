@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'data/app_database.dart';
 import 'screens/fish_screen.dart';
+import 'screens/reservations_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -118,8 +119,8 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 22),
               const Text('إدارة المحل', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              _MenuTile(icon: Icons.add_shopping_cart, title: 'حجز جديد', subtitle: 'تسجيل طلب عميل ووزن السمك', onTap: () => _openPlaceholder('حجز جديد')),
-              _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => _openPlaceholder('الحجوزات')),
+              _MenuTile(icon: Icons.add_shopping_cart, title: 'حجز جديد', subtitle: 'تسجيل طلب عميل ووزن السمك', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
+              _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.set_meal, title: 'الأسماك والأسعار', subtitle: 'إضافة الأصناف وتعديل سعر الكيلو', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FishScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => _openPlaceholder('العملاء')),
               _MenuTile(icon: Icons.payments, title: 'المدفوعات والديون', subtitle: 'تسجيل الدفعات ومراجعة المتبقي', onTap: () => _openPlaceholder('المدفوعات والديون')),
