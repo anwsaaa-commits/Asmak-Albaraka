@@ -23,18 +23,40 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Generate Android platform with permanent application ID
+        run: flutter create . --org com.asmak --project-name albaraka --platforms=android --no-pub
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze Dart code
         run: flutter analyze
       - name: Run tests
         run: flutter test
-      - name: Build release APK
+      - name: Prepare permanent release signing key
+        if: ${{ secrets.ASMAK_KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ASMAK_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ASMAK_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ASMAK_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ASMAK_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/asmak-release.jks"
+          cat > android/key.properties <<EOF
+          storeFile=$RUNNER_TEMP/asmak-release.jks
+          storePassword=$STORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+          python tool/configure_signing.py
+      - name: Build signed release APK
+        if: ${{ secrets.ASMAK_KEYSTORE_BASE64 != '' }}
         run: flutter build apk --release
+      - name: Build test APK (not for official updates)
+        if: ${{ secrets.ASMAK_KEYSTORE_BASE64 == '' }}
+        run: flutter build apk --debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: asmak-albaraka-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: ${{ secrets.ASMAK_KEYSTORE_BASE64 != '' && 'asmak-albaraka-signed-release-apk' || 'asmak-albaraka-debug-test-apk' }}
+          path: build/app/outputs/flutter-apk/*.apk
           if-no-files-found: error
           retention-days: 14
