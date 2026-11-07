@@ -6,6 +6,7 @@ import 'screens/fish_screen.dart';
 import 'screens/reservations_screen.dart';
 import 'screens/customers_screen.dart';
 import 'screens/reports_screen.dart';
+import 'screens/backup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.payments, title: 'المدفوعات والديون', subtitle: 'تسجيل الدفعات ومراجعة المتبقي', onTap: () => _openPlaceholder('المدفوعات والديون')),
               _MenuTile(icon: Icons.bar_chart, title: 'التقارير', subtitle: 'ملخص يومي وشهري وكشف حساب', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsScreen()))),
-              _MenuTile(icon: Icons.backup, title: 'النسخ الاحتياطي', subtitle: 'حفظ نسخة من بيانات التطبيق واستعادتها', onTap: () => _openPlaceholder('النسخ الاحتياطي')),
+              _MenuTile(icon: Icons.backup, title: 'النسخ الاحتياطي', subtitle: 'حفظ نسخة من بيانات التطبيق واستعادتها', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BackupScreen()))),
               const SizedBox(height: 16),
               const Center(child: Text('أسماك البركة • الإصدار الأولي', style: TextStyle(color: Colors.black45))),
             ],
