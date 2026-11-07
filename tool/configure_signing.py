@@ -5,7 +5,7 @@ if not gradle.exists():
     raise SystemExit("Expected android/app/build.gradle.kts after flutter create")
 
 source = gradle.read_text(encoding="utf-8")
-imports = "import java.io.FileInputStream\\nimport java.util.Properties\\n"
+imports = "import java.io.FileInputStream" + chr(10) + "import java.util.Properties" + chr(10)
 if "import java.util.Properties" not in source:
     source = imports + source
 
