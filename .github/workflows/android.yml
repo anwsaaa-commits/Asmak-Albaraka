@@ -40,6 +40,27 @@ jobs:
           PY
       - name: Install dependencies
         run: flutter pub get
+      - name: Set file_picker Android compile SDK to 36
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import glob
+          files = [Path(x) for x in glob.glob(str(Path.home() / '.pub-cache/hosted/pub.dev/file_picker-*/android/build.gradle*'))]
+          if not files:
+              raise SystemExit('Could not locate file_picker Android Gradle file')
+          changed = 0
+          for p in files:
+              s = p.read_text()
+              s2, n1 = re.subn(r'compileSdkVersion\\s+\\d+', 'compileSdkVersion 36', s)
+              s3, n2 = re.subn(r'compileSdk\\s*=\\s*\\d+', 'compileSdk = 36', s2)
+              if n1 + n2:
+                  p.write_text(s3)
+                  changed += 1
+          if changed == 0:
+              raise SystemExit('Could not update file_picker compileSdk declaration')
+          print(f'Updated {changed} file_picker Gradle file(s) to compileSdk 36')
+          PY
       - name: Analyze Dart code
         run: flutter analyze
       - name: Run tests
