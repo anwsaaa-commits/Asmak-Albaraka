@@ -23,6 +23,13 @@ class AppDatabase {
     return _db!;
   }
 
+  Future<String> get databasePath async => p.join(await getDatabasesPath(), 'asmak_albaraka.db');
+
+  Future<void> close() async {
+    await _db?.close();
+    _db = null;
+  }
+
   Future<List<Map<String,Object?>>> getFish() async => (await database).query('fish_types', where: 'active=1', orderBy: 'name');
   Future<int> saveFish({int? id, required String name, required double price}) async {
     final db = await database;
