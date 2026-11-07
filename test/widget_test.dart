@@ -10,7 +10,9 @@ void main() {
 
   testWidgets('Arabic home screen renders', (tester) async {
     await tester.pumpWidget(const AsmakAlbarakaApp());
-    await tester.pumpAndSettle();
+    // The home screen intentionally shows an indeterminate progress indicator
+    // while SQLite initializes, so pump one frame instead of waiting for settle.
+    await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('أسماك البركة'), findsOneWidget);
     expect(find.text('إدارة المحل'), findsOneWidget);
   });
