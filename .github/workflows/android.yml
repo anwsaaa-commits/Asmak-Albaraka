@@ -50,7 +50,7 @@ jobs:
           EOF
           python tool/configure_signing.py
       - name: Build signed release APK
-        if: ${{ secrets.ASMAK_KEYSTORE_BASE64 != '' }}
+        if: env.HAS_RELEASE_KEY == 'true'
         run: flutter build apk --release
       - name: Build test APK (not for official updates)
         if: env.HAS_RELEASE_KEY != 'true'
