@@ -47,6 +47,7 @@ class AppDatabase {
       final phoneValue = phone.trim();
       final found = phoneValue.isEmpty ? <Map<String,Object?>>[] : await txn.query('customers', where:'phone=?', whereArgs:[phoneValue], limit:1);
       final customerId = found.isNotEmpty ? found.first['id'] as int : await txn.insert('customers', {'name':customerName.trim(),'phone':phoneValue});
+      if (found.isNotEmpty) await txn.update('customers', {'name':customerName.trim()}, where:'id=?', whereArgs:[customerId]);
       final id = await txn.insert('reservations', {'customer_id':customerId,'customer_name':customerName.trim(),'customer_phone':phoneValue,'pickup_at':pickupAt.toIso8601String(),'status':'جديد','total':total,'paid':paid,'notes':notes.trim(),'created_at':DateTime.now().toIso8601String()});
       for (final x in items) {
         final q = (x['quantity_kg'] as num).toDouble();
@@ -62,6 +63,10 @@ class AppDatabase {
     final q = search.trim();
     return (await database).query('reservations', where:q.isEmpty?null:'customer_name LIKE ? OR customer_phone LIKE ?', whereArgs:q.isEmpty?null:['%$q%','%$q%'], orderBy:'pickup_at DESC');
   }
+  Future<List<Map<String,Object?>>> getReservationItems(int id) async => (await database).query('reservation_items', where:'reservation_id=?', whereArgs:[id], orderBy:'id');
+
+  Future<List<Map<String,Object?>>> getDebts() async => (await database).query('reservations', where:'total > paid AND status != ?', whereArgs:['ملغي'], orderBy:'pickup_at ASC');
+
   Future<void> updateStatus(int id, String status) async {
     const allowed = ['جديد','مؤكد','قيد التجهيز','تم التسليم','ملغي'];
     if (!allowed.contains(status)) throw ArgumentError('حالة غير صحيحة');
