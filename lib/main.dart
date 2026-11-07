@@ -102,7 +102,7 @@ class AppDatabase {
           FOREIGN KEY(reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
         )''');
         await db.insert('fish_types', {'name': 'سمك ثمد', 'price_per_kg': 0});
-        await db.insert('fish_types', {'name': 'سمك白', 'price_per_kg': 0});
+        await db.insert('fish_types', {'name': 'سمك أبيض', 'price_per_kg': 0});
       },
       onConfigure: (db) async => db.execute('PRAGMA foreign_keys = ON'),
     );
