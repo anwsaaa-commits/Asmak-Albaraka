@@ -1,4 +1,4 @@
-name: Build Asmak Albaraka Android APK
+name: Build Asmak Albaraka Android Test APK
 
 on:
   push:
@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HAS_RELEASE_KEY: ${{ secrets.ASMAK_KEYSTORE_BASE64 != '' }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -25,7 +23,7 @@ jobs:
         with:
           channel: stable
           cache: true
-      - name: Generate Android platform with permanent application ID
+      - name: Generate Android platform
         run: flutter create . --org com.asmak --project-name albaraka --platforms=android --no-pub
       - name: Set Android compile SDK to 36
         run: |
@@ -34,7 +32,7 @@ jobs:
           import re
           p = Path('android/app/build.gradle.kts')
           s = p.read_text()
-          s, count = re.subn(r'compileSdk\\s*=\\s*[^\\n]+', 'compileSdk = 36', s, count=1)
+          s, count = re.subn(r'compileSdk\s*=\s*[^\n]+', 'compileSdk = 36', s, count=1)
           if count != 1:
               raise SystemExit('Could not locate compileSdk setting in generated Android Gradle file')
           p.write_text(s)
@@ -46,32 +44,12 @@ jobs:
         run: flutter analyze
       - name: Run tests
         run: flutter test
-      - name: Prepare permanent release signing key
-        if: env.HAS_RELEASE_KEY == 'true'
-        env:
-          KEYSTORE_BASE64: ${{ secrets.ASMAK_KEYSTORE_BASE64 }}
-          STORE_PASSWORD: ${{ secrets.ASMAK_STORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ASMAK_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.ASMAK_KEY_PASSWORD }}
-        run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/asmak-release.jks"
-          cat > android/key.properties <<EOF
-          storeFile=$RUNNER_TEMP/asmak-release.jks
-          storePassword=$STORE_PASSWORD
-          keyAlias=$KEY_ALIAS
-          keyPassword=$KEY_PASSWORD
-          EOF
-          python tool/configure_signing.py
-      - name: Build signed release APK
-        if: env.HAS_RELEASE_KEY == 'true'
-        run: flutter build apk --release
-      - name: Build test APK (not for official updates)
-        if: env.HAS_RELEASE_KEY != 'true'
+      - name: Build debug test APK only
         run: flutter build apk --debug
-      - name: Upload APK
+      - name: Upload debug test APK
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.HAS_RELEASE_KEY == 'true' && 'asmak-albaraka-signed-release-apk' || 'asmak-albaraka-debug-test-apk' }}
-          path: build/app/outputs/flutter-apk/*.apk
+          name: asmak-albaraka-debug-test-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 14
