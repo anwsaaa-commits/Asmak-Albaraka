@@ -18,7 +18,7 @@ class _CustomersScreenState extends State<CustomersScreen>{
   @override Widget build(BuildContext context)=>Scaffold(
     appBar:AppBar(title:const Text('العملاء')),
     body:rows.isEmpty?const Center(child:Text('سيظهر العملاء هنا بعد تسجيل أول حجز')):RefreshIndicator(onRefresh:load,child:ListView.builder(padding:const EdgeInsets.all(12),itemCount:rows.length,itemBuilder:(ctx,i){
-      final c=rows[i];return Card(child:ListTile(leading:const CircleAvatar(child:Icon(Icons.person)),title:Text(c['name'] as String),subtitle:Text('الهاتف: ${c['phone']}\nعدد الحجوزات: ${c['count']}\nإجمالي التعامل: ${fmt.format(c['total'])} ريال • المتبقي: ${fmt.format(c['debt'])} ريال'),isThreeLine:true));
+      final c=rows[i];return Card(child:ListTile(leading:const CircleAvatar(child:Icon(Icons.person)),title:Text(c['name'] as String),subtitle:Text('الهاتف: ${c['phone']}\nعدد الحجوزات: ${c['count']}\nإجمالي التعامل: ${fmt.format((c['total'] as num?) ?? 0)} ريال • المتبقي: ${fmt.format((c['debt'] as num?) ?? 0)} ريال'),isThreeLine:true));
     })),
   );
 }
