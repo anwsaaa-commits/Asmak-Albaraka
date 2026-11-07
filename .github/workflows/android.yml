@@ -44,22 +44,29 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
           import glob
-          files = [Path(x) for x in glob.glob(str(Path.home() / '.pub-cache/hosted/pub.dev/file_picker-*/android/build.gradle*'))]
+          import re
+          cache = Path.home() / '.pub-cache'
+          files = [Path(x) for x in glob.glob(str(cache / 'hosted' / 'pub.dev' / 'file_picker-*' / 'android' / 'build.gradle*'))]
           if not files:
-              raise SystemExit('Could not locate file_picker Android Gradle file')
+              raise SystemExit('Could not locate file_picker Android Gradle file in Pub cache')
           changed = 0
-          for p in files:
-              s = p.read_text()
-              s2, n1 = re.subn(r'compileSdkVersion\\s+\\d+', 'compileSdkVersion 36', s)
-              s3, n2 = re.subn(r'compileSdk\\s*=\\s*\\d+', 'compileSdk = 36', s2)
-              if n1 + n2:
-                  p.write_text(s3)
-                  changed += 1
+          for path in files:
+              source = path.read_text()
+              updated, count = re.subn(
+                  r'(?m)^(\\s*compileSdk(?:Version)?\\s*(?:=\\s*)?).+$',
+                  r'\\g<1>36',
+                  source
+              )
+              if count:
+                  path.write_text(updated)
+                  changed += count
+                  print(f'Updated {path}')
           if changed == 0:
-              raise SystemExit('Could not update file_picker compileSdk declaration')
-          print(f'Updated {changed} file_picker Gradle file(s) to compileSdk 36')
+              for path in files:
+                  print(f'No compileSdk declaration found in {path}')
+              raise SystemExit('file_picker compileSdk declaration was not recognized; stopping safely')
+          print(f'Updated {changed} file_picker compileSdk declaration(s) to 36')
           PY
       - name: Analyze Dart code
         run: flutter analyze
