@@ -31,7 +31,7 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
           Text('موعد الاستلام: ${r['pickup_at']}'),
           FutureBuilder<List<Map<String,Object?>>>(future:AppDatabase.instance.getReservationItems(id),builder:(context,snapshot){if(!snapshot.hasData)return const LinearProgressIndicator();return Column(crossAxisAlignment:CrossAxisAlignment.start,children:snapshot.data!.map((item)=>Text('• ${item['fish_name']}: ${item['quantity_kg']} كجم × ${fmt.format(item['unit_price'])} ريال')).toList());}),
           Text('المدفوع: ${fmt.format(paid)} ريال | المتبقي: ${fmt.format(remain)} ريال'),
-          DropdownButtonFormField<String>(value:r['status'] as String,decoration:const InputDecoration(labelText:'حالة الحجز'),items:const ['جديد','مؤكد','قيد التجهيز','تم التسليم','ملغي'].map((s)=>DropdownMenuItem(value:s,child:Text(s))).toList(),onChanged:(v){if(v!=null)status(id,v);}),
+          DropdownButtonFormField<String>(initialValue:r['status'] as String,decoration:const InputDecoration(labelText:'حالة الحجز'),items:const ['جديد','مؤكد','قيد التجهيز','تم التسليم','ملغي'].map((s)=>DropdownMenuItem(value:s,child:Text(s))).toList(),onChanged:(v){if(v!=null)status(id,v);}),
           if(remain>0&&r['status']!='ملغي')TextButton.icon(onPressed:()=>payment(id,remain),icon:const Icon(Icons.payments),label:const Text('تسجيل دفعة')),
         ]));
       }))),
