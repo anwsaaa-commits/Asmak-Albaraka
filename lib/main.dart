@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(child: _StatCard(title: 'مبيعات اليوم', value: money(_todaySales), icon: Icons.point_of_sale)),
               ]),
               const SizedBox(height: 10),
-              _StatCard(title: 'المبالغ المتبقية', value: money(_outstanding), icon: Icons.account_balance_wallet, wide: true),
+              _StatCard(title: 'المبالغ المتبقية', value: money(_outstanding), icon: Icons.account_balance_wallet),
               const SizedBox(height: 22),
               const Text('إدارة المحل', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
@@ -142,11 +142,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _StatCard extends StatelessWidget {
-  const _StatCard({required this.title, required this.value, required this.icon, this.wide = false});
+  const _StatCard({required this.title, required this.value, required this.icon});
   final String title;
   final String value;
   final IconData icon;
-  final bool wide;
   @override
   Widget build(BuildContext context) => Card(
         child: Padding(
