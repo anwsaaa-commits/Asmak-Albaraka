@@ -13,10 +13,10 @@ class AppDatabase {
       onConfigure: (db) async => db.execute('PRAGMA foreign_keys = ON'),
       onCreate: (db, version) async {
         await db.execute('CREATE TABLE fish_types (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, price_per_kg REAL NOT NULL CHECK(price_per_kg >= 0), active INTEGER NOT NULL DEFAULT 1)');
-        await db.execute('CREATE TABLE customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, phone TEXT NOT NULL DEFAULT '', notes TEXT NOT NULL DEFAULT '')');
+        await db.execute("CREATE TABLE customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, phone TEXT NOT NULL DEFAULT '', notes TEXT NOT NULL DEFAULT '')");
         await db.execute("CREATE TABLE reservations (id INTEGER PRIMARY KEY AUTOINCREMENT, customer_id INTEGER, customer_name TEXT NOT NULL, customer_phone TEXT NOT NULL DEFAULT '', pickup_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'جديد', total REAL NOT NULL DEFAULT 0, paid REAL NOT NULL DEFAULT 0, notes TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, FOREIGN KEY(customer_id) REFERENCES customers(id))");
         await db.execute('CREATE TABLE reservation_items (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL, fish_type_id INTEGER, fish_name TEXT NOT NULL, quantity_kg REAL NOT NULL CHECK(quantity_kg > 0), unit_price REAL NOT NULL CHECK(unit_price >= 0), line_total REAL NOT NULL, FOREIGN KEY(reservation_id) REFERENCES reservations(id) ON DELETE CASCADE)');
-        await db.execute('CREATE TABLE payments (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL, amount REAL NOT NULL CHECK(amount > 0), paid_at TEXT NOT NULL, note TEXT NOT NULL DEFAULT '', FOREIGN KEY(reservation_id) REFERENCES reservations(id) ON DELETE CASCADE)');
+        await db.execute("CREATE TABLE payments (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL, amount REAL NOT NULL CHECK(amount > 0), paid_at TEXT NOT NULL, note TEXT NOT NULL DEFAULT '', FOREIGN KEY(reservation_id) REFERENCES reservations(id) ON DELETE CASCADE)");
         await db.execute('CREATE INDEX idx_reservations_pickup ON reservations(pickup_at)');
         await db.execute('CREATE INDEX idx_reservations_phone ON reservations(customer_phone)');
       });
