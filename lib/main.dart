@@ -137,9 +137,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  void _openPlaceholder(String name) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('سيتم تجهيز شاشة $name في المرحلة التالية')));
-  }
 }
 
 class _StatCard extends StatelessWidget {
