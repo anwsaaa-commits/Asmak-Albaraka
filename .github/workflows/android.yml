@@ -27,6 +27,19 @@ jobs:
           cache: true
       - name: Generate Android platform with permanent application ID
         run: flutter create . --org com.asmak --project-name albaraka --platforms=android --no-pub
+      - name: Set Android compile SDK to 36
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('android/app/build.gradle.kts')
+          s = p.read_text()
+          s, count = re.subn(r'compileSdk\\s*=\\s*[^\\n]+', 'compileSdk = 36', s, count=1)
+          if count != 1:
+              raise SystemExit('Could not locate compileSdk setting in generated Android Gradle file')
+          p.write_text(s)
+          print('Android compileSdk set to 36')
+          PY
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze Dart code
