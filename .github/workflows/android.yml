@@ -54,8 +54,8 @@ jobs:
           for path in files:
               source = path.read_text()
               updated, count = re.subn(
-                  r'(?m)^(\\s*compileSdk(?:Version)?\\s*(?:=\\s*)?).+$',
-                  r'\\g<1>36',
+                  r'(?m)^(\s*compileSdk(?:Version)?\s*(?:=\s*)?).+$',
+                  r'\g<1>36',
                   source
               )
               if count:
