@@ -84,10 +84,10 @@ class _CloudOrdersScreenState extends State<CloudOrdersScreen> {
       child: ExpansionTile(
         initiallyExpanded: index == 0,
         title: Text(
-          '\${order['customer_name'] ?? ''} • \${_money.format(total)} ر.ي',
+          '${order['customer_name'] ?? ''} • ${_money.format(total)} ر.ي',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text('طلب \${order['order_code'] ?? ''} • $status'),
+        subtitle: Text('طلب ${order['order_code'] ?? ''} • $status'),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         children: [
           _line('الهاتف', order['customer_phone']),
@@ -103,8 +103,8 @@ class _CloudOrdersScreenState extends State<CloudOrdersScreen> {
             final quantity = (item['quantity_kg'] ?? '').toString();
             final lineTotal = (item['line_total'] as num?)?.toDouble() ?? 0;
             return _line(
-              '\${item['fish_name'] ?? ''} • $quantity كجم',
-              '\${_money.format(lineTotal)} ر.ي',
+              '${item['fish_name'] ?? ''} • $quantity كجم',
+              '${_money.format(lineTotal)} ر.ي',
             );
           }),
           const SizedBox(height: 10),
