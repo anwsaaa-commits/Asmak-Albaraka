@@ -104,7 +104,7 @@ class _CloudProductsScreenState extends State<CloudProductsScreen> {
         return Card(child: ListTile(
           leading: const CircleAvatar(child: Icon(Icons.set_meal)),
           title: Text(p['name']?.toString() ?? ''),
-          subtitle: Text((offer ? 'سعر العرض: ' : 'السعر: ') + (price?.toString() ?? '0') + ' ر.ي / كجم' + ((p['is_active'] == true) ? '' : ' • مخفي')),
+          subtitle: Text('${offer ? 'سعر العرض: ' : 'السعر: '}${price?.toString() ?? '0'} ر.ي / كجم${p['is_active'] == true ? '' : ' • مخفي'}'),
           onTap: () => _edit(p),
           trailing: IconButton(icon: Icon(p['is_active'] == true ? Icons.visibility_off : Icons.visibility), onPressed: () => _toggle(p), tooltip: 'إظهار أو إخفاء'),
         ));
