@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import '../data/app_database.dart';
 import 'reservation_form_screen.dart';
 
@@ -16,6 +17,30 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
   @override void dispose(){search.dispose();super.dispose();}
   Future<void> load()async{final result=await AppDatabase.instance.getReservations(search:search.text, reservationType:widget.reservationType);if(mounted)setState(()=>rows=result);}
   Future<void> status(int id,String value)async{await AppDatabase.instance.updateStatus(id,value);load();}
+  Future<void> shareReceipt(Map<String,Object?> reservation) async {
+    final id = reservation['id'] as int;
+    final items = await AppDatabase.instance.getReservationItems(id);
+    final total = (reservation['total'] as num).toDouble();
+    final paid = (reservation['paid'] as num).toDouble();
+    final itemLines = items.map((item) => '• ${item['fish_name']}: ${item['quantity_kg']} كجم × ${fmt.format(item['unit_price'])} = ${fmt.format(item['line_total'])} ريال').join('\\n');
+    final message = [
+      '🐟 أسماك البركة',
+      'بطاقة تأكيد الحجز رقم: $id',
+      'العميل: ${reservation['customer_name']}',
+      'الهاتف: ${reservation['customer_phone']}',
+      'نوع الحجز: ${reservation['reservation_type'] ?? 'عادي'}',
+      'موعد الاستلام: ${reservation['pickup_at']}',
+      'تفاصيل الطلب:', itemLines,
+      'الإجمالي: ${fmt.format(total)} ريال',
+      'المدفوع: ${fmt.format(paid)} ريال',
+      'المتبقي: ${fmt.format(total-paid)} ريال',
+      'الحالة: ${reservation['status']}',
+      'التسليم عند وصول العميل إلى المحل',
+      'شكراً لثقتكم بأسماك البركة'
+    ].join('\\n');
+    await Share.share(message, subject: 'تأكيد حجز أسماك البركة رقم $id');
+  }
+
   Future<void> payment(int id,double remaining)async{
     final ctl=TextEditingController();
     final amount=await showDialog<double>(context:context,builder:(ctx)=>AlertDialog(title:const Text('تسجيل دفعة'),content:TextField(controller:ctl,keyboardType:const TextInputType.numberWithOptions(decimal:true),decoration:InputDecoration(labelText:'المتبقي ${fmt.format(remaining)} ريال')),actions:[TextButton(onPressed:()=>Navigator.pop(ctx),child:const Text('إلغاء')),FilledButton(onPressed:(){final n=double.tryParse(ctl.text);if(n!=null&&n>0&&n<=remaining)Navigator.pop(ctx,n);},child:const Text('حفظ'))]));
@@ -30,6 +55,7 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
         final r=rows[i];final id=r['id'] as int;final total=(r['total'] as num).toDouble();final paid=(r['paid'] as num).toDouble();final remain=total-paid;
         return Card(margin:const EdgeInsets.symmetric(horizontal:12,vertical:5),child:ExpansionTile(title:Text(r['customer_name'] as String),subtitle:Text('${r['customer_phone']} • ${fmt.format(total)} ريال'),childrenPadding:const EdgeInsets.all(12),children:[
           Text('رقم الحجز: $id • النوع: ${r['reservation_type'] ?? 'عادي'}'),
+          Align(alignment:Alignment.centerLeft,child:OutlinedButton.icon(onPressed:()=>shareReceipt(r),icon:const Icon(Icons.share),label:const Text('إرسال بطاقة تأكيد الحجز'))),
           Text('موعد الاستلام: ${r['pickup_at']}'),
           FutureBuilder<List<Map<String,Object?>>>(future:AppDatabase.instance.getReservationItems(id),builder:(context,snapshot){if(!snapshot.hasData)return const LinearProgressIndicator();return Column(crossAxisAlignment:CrossAxisAlignment.start,children:snapshot.data!.map((item)=>Text('• ${item['fish_name']}: ${item['quantity_kg']} كجم × ${fmt.format(item['unit_price'])} ريال')).toList());}),
           Text('المدفوع: ${fmt.format(paid)} ريال | المتبقي: ${fmt.format(remain)} ريال'),
