@@ -37,8 +37,8 @@ main{max-width:1100px;margin:-18px auto 50px;padding:0 16px}.section-title{displ
 <script>
 /* Add the Supabase project URL and publishable/anon key after creating the project.
    The anon key is intended for browser use; NEVER use a service_role key here. */
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://qrvphvimsjhnuqcvnfaw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_1mVWr0OIelzIPW4iAdwLEQ_gCSfpB8X';
 const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
 const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 let products = [], cart = new Map();
