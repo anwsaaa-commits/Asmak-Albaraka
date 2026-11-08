@@ -32,7 +32,7 @@ jobs:
           import re
           p = Path('android/app/build.gradle.kts')
           s = p.read_text()
-          s, count = re.subn(r'compileSdk\\s*=\\s*[^\\n]+', 'compileSdk = 36', s, count=1)
+          s, count = re.subn(r'compileSdk\s*=\s*[^\n]+', 'compileSdk = 36', s, count=1)
           if count != 1:
               raise SystemExit('Could not locate compileSdk setting in generated Android Gradle file')
           p.write_text(s)
@@ -54,8 +54,8 @@ jobs:
           for path in files:
               source = path.read_text()
               updated, count = re.subn(
-                  r'(?m)^(\\s*compileSdk(?:Version)?\\s*(?:=\\s*)?).+$',
-                  r'\\g<1>36',
+                  r'(?m)^(\s*compileSdk(?:Version)?\s*(?:=\s*)?).+$',
+                  r'\g<1>36',
                   source
               )
               if count:
