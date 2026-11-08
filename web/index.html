@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#075b54"><meta name="description" content="احجز الأسماك الطازجة من أسماك البركة بسهولة.">
+<title>أسماك البركة | احجز الآن</title>
+<style>
+:root{font-family:Tahoma,Arial,sans-serif;color:#173b38;background:#f4f8f6;--green:#087e70;--deep:#075b54;--gold:#d9a441}
+*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#064b46,#0b8274);color:white;padding:24px max(5vw,18px) 38px}
+nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:22px;font-weight:800}.pill{border:1px solid #ffffff66;border-radius:30px;padding:9px 15px;color:white;text-decoration:none}
+.hero{max-width:1100px;margin:35px auto 0}.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 12px}.hero p{color:#d8efeb;margin:0;line-height:1.8}
+main{max-width:1100px;margin:-18px auto 50px;padding:0 16px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:28px 0 14px}.section-title h2{margin:0;font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}.product,.panel{background:white;border:1px solid #e1ebe7;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px #153c3210}.photo{height:145px;background:#e7f1ed;display:grid;place-items:center;color:#6d8e83;font-size:44px}.product-body{padding:14px}.product h3{margin:0 0 7px}.muted{color:#70847d;font-size:13px}.price{font-weight:800;color:var(--deep);margin:10px 0}.offer{color:#a36b09;font-size:12px;font-weight:bold}.actions{display:flex;gap:8px;align-items:center}.btn{border:0;background:var(--green);color:white;border-radius:11px;padding:11px 15px;font-weight:bold;cursor:pointer}.btn.secondary{background:#eaf3ef;color:var(--deep)}.btn:disabled{opacity:.5}.qty{width:72px;padding:9px;border:1px solid #d7e4de;border-radius:9px}
+.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:22px}.panel{padding:18px}.panel h2{margin:0 0 14px;font-size:20px}.cart-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf1ef;padding:10px 0;gap:10px}.field{display:grid;gap:6px;margin:11px 0}.field label{font-size:13px;font-weight:bold}.field input,.field textarea{width:100%;border:1px solid #d7e4de;border-radius:10px;padding:12px;font:inherit;background:white}.field textarea{min-height:70px}.total{font-size:20px;font-weight:800;color:var(--deep);margin:15px 0}.notice{padding:12px;border-radius:10px;background:#edf6f2;color:#315f51;line-height:1.7;font-size:13px}.empty{text-align:center;padding:25px;color:#75877f}footer{text-align:center;color:#75877f;padding:24px;font-size:12px}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.hero{margin-top:26px}.section-title{align-items:flex-start;gap:8px;flex-direction:column}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header><nav><div class="brand">🐟 أسماك البركة</div><a class="pill" href="#booking">سلة الحجز (<span id="cart-count">0</span>)</a></nav>
+<div class="hero"><h1>طازج البحر… إلى اختيارك</h1><p>تصفح الأصناف والأسعار والعروض، واختر الكمية وموعد الاستلام. سنستقبل طلبك ونتواصل معك لتأكيده.</p></div></header>
+<main>
+<div class="section-title"><h2>الأسماك المتوفرة</h2><span class="muted" id="load-state">جاري تحميل الأصناف…</span></div>
+<div class="grid" id="products"><div class="empty">يتم تجهيز قائمة الأسماك…</div></div>
+<div class="layout" id="booking">
+<section class="panel"><h2>بيانات الحجز</h2><div class="notice">إرسال الطلب لا يعني تأكيده النهائي؛ ستصلك متابعة من أسماك البركة بعد مراجعة التوفر.</div>
+<form id="order-form">
+<div class="field"><label for="customer">الاسم الكامل</label><input id="customer" required minlength="2" autocomplete="name"></div>
+<div class="field"><label for="phone">رقم الهاتف</label><input id="phone" required inputmode="tel" autocomplete="tel" minlength="7"></div>
+<div class="field"><label for="pickup">موعد الاستلام</label><input id="pickup" type="datetime-local" required></div>
+<div class="field"><label for="notes">ملاحظات (اختياري)</label><textarea id="notes" maxlength="500"></textarea></div>
+<button class="btn" id="submit" type="submit" style="width:100%">إرسال طلب الحجز</button>
+</form><p id="result" role="status" aria-live="polite"></p></section>
+<aside class="panel"><h2>سلة الحجز</h2><div id="cart"><div class="empty">لم تضف أصنافًا بعد</div></div><div class="total">الإجمالي التقديري: <span id="total">0</span> ر.ي</div><div class="muted">يُعاد احتساب السعر عند إرسال الطلب من قاعدة البيانات لضمان صحة الأسعار.</div></aside>
+</div>
+</main><footer>© أسماك البركة — منصة الحجز الإلكتروني</footer>
+<script>
+/* Add the Supabase project URL and publishable/anon key after creating the project.
+   The anon key is intended for browser use; NEVER use a service_role key here. */
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
+const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+let products = [], cart = new Map();
+const money = n => new Intl.NumberFormat('ar-YE',{maximumFractionDigits:2}).format(n);
+const el = id => document.getElementById(id);
+function drawCart(){
+ let rows=[...cart.values()]; el('cart-count').textContent=rows.reduce((s,x)=>s+x.quantity,0);
+ el('cart').innerHTML=rows.length?rows.map(x=>'<div class="cart-row"><span>'+escapeHtml(x.name)+' × '+x.quantity+' كجم</span><b>'+money(x.price*x.quantity)+'</b></div>').join(''):'<div class="empty">لم تضف أصنافًا بعد</div>';
+ el('total').textContent=money(rows.reduce((s,x)=>s+x.price*x.quantity,0));
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function drawProducts(){
+ el('products').innerHTML=products.length?products.map(p=>{const price=p.is_offer?Number(p.offer_price_per_kg):Number(p.price_per_kg);return '<article class="product"><div class="photo">'+(p.image_url?'<img src="'+escapeHtml(p.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'🐟')+'</div><div class="product-body">'+(p.is_offer?'<div class="offer">عرض خاص</div>':'')+'<h3>'+escapeHtml(p.name)+'</h3><div class="muted">'+escapeHtml(p.description||'سمك طازج من أسماك البركة')+'</div><div class="price">'+money(price)+' ر.ي / كجم</div><div class="actions"><input class="qty" id="q-'+p.id+'" type="number" min="0.25" max="100" step="0.25" value="1" aria-label="الكمية بالكيلو"><button class="btn" data-add="'+p.id+'">أضف للسلة</button></div></div></article>';}).join(''):'<div class="empty">لا توجد أصناف منشورة حاليًا.</div>';
+ document.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>{const p=products.find(x=>x.id===Number(b.dataset.add));const q=Number(el('q-'+p.id).value);if(!Number.isFinite(q)||q<=0||q>100)return;cart.set(p.id,{id:p.id,name:p.name,price:p.is_offer?Number(p.offer_price_per_kg):Number(p.price_per_kg),quantity:q});drawCart();}));
+}
+async function loadProducts(){
+ if(!db){el('load-state').textContent='بانتظار إعداد قاعدة البيانات السحابية';el('products').innerHTML='<div class="empty">واجهة المتجر جاهزة. يلزم ربط مشروع Supabase ونشر أصنافك وأسعارك لعرض المنتجات والحجوزات الفعلية.</div>';return;}
+ const {data,error}=await db.from('cloud_fish_products').select('id,name,description,image_url,price_per_kg,is_active,is_offer,offer_price_per_kg').eq('is_active',true).order('name');
+ if(error){el('load-state').textContent='تعذر تحميل الأصناف';return;}products=data||[];el('load-state').textContent=products.length+' صنف';drawProducts();
+}
+el('order-form').addEventListener('submit',async e=>{
+ e.preventDefault();if(!cart.size){el('result').textContent='أضف صنفًا واحدًا على الأقل.';return;}
+ if(!db){el('result').textContent='لم يتم ربط قاعدة البيانات بعد؛ لم يُرسل أي طلب.';return;}
+ const button=el('submit');button.disabled=true;button.textContent='جارٍ إرسال الطلب…';el('result').textContent='';
+ const items=[...cart.values()].map(x=>({product_id:x.id,quantity_kg:x.quantity}));
+ const {data,error}=await db.rpc('place_customer_order',{p_customer_name:el('customer').value.trim(),p_customer_phone:el('phone').value.trim(),p_pickup_at:new Date(el('pickup').value).toISOString(),p_notes:el('notes').value.trim(),p_items:items});
+ button.disabled=false;button.textContent='إرسال طلب الحجز';
+ if(error){el('result').textContent='تعذر إرسال الطلب: '+error.message;return;}
+ el('result').innerHTML='<div class="notice">تم استلام طلبك بنجاح. رقم الطلب: <b>'+escapeHtml(data.order_code)+'</b><br>الإجمالي: '+money(data.total)+' ر.ي — الحالة: جديد<br>احتفظ برقم الطلب حتى نؤكد لك موعد الاستلام.</div>';
+ cart.clear();drawCart();
+});
+loadProducts();
+</script></body></html>
