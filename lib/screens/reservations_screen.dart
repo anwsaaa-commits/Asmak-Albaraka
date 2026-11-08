@@ -23,7 +23,7 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
   }
   @override Widget build(BuildContext context)=>Scaffold(
     appBar:AppBar(title:Text(widget.reservationType == 'عرض' ? 'حجوزات العروض' : 'الحجوزات')),
-    floatingActionButton:FloatingActionButton.extended(onPressed:()async{final done=await Navigator.push<bool>(context,MaterialPageRoute(builder:(_)=>const ReservationFormScreen(reservationType:widget.reservationType ?? 'عادي')));if(done==true)load();},icon:const Icon(Icons.add),label:Text(widget.reservationType == 'عرض' ? 'حجز عرض' : 'حجز جديد')),
+    floatingActionButton:FloatingActionButton.extended(onPressed:()async{final done=await Navigator.push<bool>(context,MaterialPageRoute(builder:(_)=>ReservationFormScreen(reservationType:widget.reservationType ?? 'عادي')));if(done==true)load();},icon:const Icon(Icons.add),label:Text(widget.reservationType == 'عرض' ? 'حجز عرض' : 'حجز جديد')),
     body:Column(children:[
       Padding(padding:const EdgeInsets.all(12),child:TextField(controller:search,decoration:const InputDecoration(prefixIcon:Icon(Icons.search),hintText:'ابحث باسم العميل أو الهاتف',border:OutlineInputBorder()))),
       Expanded(child:rows.isEmpty?const Center(child:Text('لا توجد حجوزات')):RefreshIndicator(onRefresh:load,child:ListView.builder(itemCount:rows.length,itemBuilder:(ctx,i){
