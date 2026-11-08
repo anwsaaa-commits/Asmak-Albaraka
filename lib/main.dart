@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                 child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('مرحباً بك', style: TextStyle(color: Colors.white70, fontSize: 15)),
                   SizedBox(height: 8),
-                  Text('إدارة حجوزات الأسماك بسهولة', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
+                  Text('احجز الآن', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
                   Text('كل بياناتك محفوظة على جهازك وتعمل دون إنترنت', style: TextStyle(color: Colors.white70)),
                 ]),
