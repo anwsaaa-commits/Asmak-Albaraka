@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import '../data/app_database.dart';
 
 class ReservationFormScreen extends StatefulWidget {
-  const ReservationFormScreen({super.key});
+  const ReservationFormScreen({super.key, this.reservationType = 'عادي'});
+  final String reservationType;
   @override State<ReservationFormScreen> createState()=>_ReservationFormScreenState();
 }
 class _ReservationFormScreenState extends State<ReservationFormScreen>{
@@ -29,13 +30,13 @@ class _ReservationFormScreenState extends State<ReservationFormScreen>{
     if(paidValue>total){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('الدفعة أكبر من الإجمالي')));return;}
     setState(()=>saving=true);
     try{
-      await AppDatabase.instance.createReservation(customerName:customer.text,phone:phone.text,pickupAt:pickup,paid:paidValue,notes:notes.text,items:lines.map((l)=>{'fish_type_id':l.fish!['id'],'fish_name':l.fish!['name'],'quantity_kg':l.quantity,'unit_price':l.price}).toList());
+      await AppDatabase.instance.createReservation(customerName:customer.text,phone:phone.text,pickupAt:pickup,paid:paidValue,notes:notes.text,reservationType:widget.reservationType,items:lines.map((l)=>{'fish_type_id':l.fish!['id'],'fish_name':l.fish!['name'],'quantity_kg':l.quantity,'unit_price':l.price}).toList());
       if(mounted)Navigator.pop(context,true);
     }catch(e){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('تعذر حفظ الحجز: $e')));}
     finally{if(mounted)setState(()=>saving=false);}
   }
   @override Widget build(BuildContext context)=>Scaffold(
-    appBar:AppBar(title:const Text('حجز جديد')),
+    appBar:AppBar(title:Text(widget.reservationType == 'عرض' ? 'حجز عرض' : 'حجز جديد')),
     body:fish.isEmpty?const Center(child:Text('أضف أنواع الأسماك وأسعارها أولاً')):Form(key:form,child:ListView(padding:const EdgeInsets.all(16),children:[
       const Text('بيانات العميل',style:TextStyle(fontSize:17,fontWeight:FontWeight.bold)),
       TextFormField(controller:customer,decoration:const InputDecoration(labelText:'اسم العميل'),validator:(v)=>v==null||v.trim().isEmpty?'اسم العميل مطلوب':null),

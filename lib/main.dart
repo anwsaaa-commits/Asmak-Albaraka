@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                 child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('مرحباً بك', style: TextStyle(color: Colors.white70, fontSize: 15)),
                   SizedBox(height: 8),
-                  Text('إدارة حجوزات الأسماك بسهولة', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
+                  Text('احجز الآن', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
                   Text('كل بياناتك محفوظة على جهازك وتعمل دون إنترنت', style: TextStyle(color: Colors.white70)),
                 ]),
@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> {
               const Text('إدارة المحل', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               _MenuTile(icon: Icons.add_shopping_cart, title: 'حجز جديد', subtitle: 'تسجيل طلب عميل ووزن السمك', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
+              _MenuTile(icon: Icons.local_offer, title: 'العروض وبسعر مناسب', subtitle: 'حجوزات مستقلة بأسعار خاصة', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen(reservationType: 'عرض'))).then((_) => _refresh())),
               _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.set_meal, title: 'الأسماك والأسعار', subtitle: 'إضافة الأصناف وتعديل سعر الكيلو', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FishScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersScreen())).then((_) => _refresh())),
