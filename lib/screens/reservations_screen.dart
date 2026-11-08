@@ -4,7 +4,8 @@ import '../data/app_database.dart';
 import 'reservation_form_screen.dart';
 
 class ReservationsScreen extends StatefulWidget {
-  const ReservationsScreen({super.key});
+  const ReservationsScreen({super.key, this.reservationType});
+  final String? reservationType;
   @override State<ReservationsScreen> createState()=>_ReservationsScreenState();
 }
 class _ReservationsScreenState extends State<ReservationsScreen>{
@@ -13,7 +14,7 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
   final fmt=NumberFormat('#,##0.##','en');
   @override void initState(){super.initState();search.addListener(load);load();}
   @override void dispose(){search.dispose();super.dispose();}
-  Future<void> load()async{final result=await AppDatabase.instance.getReservations(search:search.text);if(mounted)setState(()=>rows=result);}
+  Future<void> load()async{final result=await AppDatabase.instance.getReservations(search:search.text, reservationType:widget.reservationType);if(mounted)setState(()=>rows=result);}
   Future<void> status(int id,String value)async{await AppDatabase.instance.updateStatus(id,value);load();}
   Future<void> payment(int id,double remaining)async{
     final ctl=TextEditingController();
@@ -21,17 +22,19 @@ class _ReservationsScreenState extends State<ReservationsScreen>{
     ctl.dispose();if(amount!=null){try{await AppDatabase.instance.addPayment(id,amount);load();}catch(e){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('تعذر تسجيل الدفعة: $e')));}}
   }
   @override Widget build(BuildContext context)=>Scaffold(
-    appBar:AppBar(title:const Text('الحجوزات')),
-    floatingActionButton:FloatingActionButton.extended(onPressed:()async{final done=await Navigator.push<bool>(context,MaterialPageRoute(builder:(_)=>const ReservationFormScreen()));if(done==true)load();},icon:const Icon(Icons.add),label:const Text('حجز جديد')),
+    appBar:AppBar(title:Text(widget.reservationType == 'عرض' ? 'حجوزات العروض' : 'الحجوزات')),
+    floatingActionButton:FloatingActionButton.extended(onPressed:()async{final done=await Navigator.push<bool>(context,MaterialPageRoute(builder:(_)=>const ReservationFormScreen(reservationType:widget.reservationType ?? 'عادي')));if(done==true)load();},icon:const Icon(Icons.add),label:Text(widget.reservationType == 'عرض' ? 'حجز عرض' : 'حجز جديد')),
     body:Column(children:[
       Padding(padding:const EdgeInsets.all(12),child:TextField(controller:search,decoration:const InputDecoration(prefixIcon:Icon(Icons.search),hintText:'ابحث باسم العميل أو الهاتف',border:OutlineInputBorder()))),
       Expanded(child:rows.isEmpty?const Center(child:Text('لا توجد حجوزات')):RefreshIndicator(onRefresh:load,child:ListView.builder(itemCount:rows.length,itemBuilder:(ctx,i){
         final r=rows[i];final id=r['id'] as int;final total=(r['total'] as num).toDouble();final paid=(r['paid'] as num).toDouble();final remain=total-paid;
         return Card(margin:const EdgeInsets.symmetric(horizontal:12,vertical:5),child:ExpansionTile(title:Text(r['customer_name'] as String),subtitle:Text('${r['customer_phone']} • ${fmt.format(total)} ريال'),childrenPadding:const EdgeInsets.all(12),children:[
+          Text('رقم الحجز: $id • النوع: ${r['reservation_type'] ?? 'عادي'}'),
           Text('موعد الاستلام: ${r['pickup_at']}'),
           FutureBuilder<List<Map<String,Object?>>>(future:AppDatabase.instance.getReservationItems(id),builder:(context,snapshot){if(!snapshot.hasData)return const LinearProgressIndicator();return Column(crossAxisAlignment:CrossAxisAlignment.start,children:snapshot.data!.map((item)=>Text('• ${item['fish_name']}: ${item['quantity_kg']} كجم × ${fmt.format(item['unit_price'])} ريال')).toList());}),
           Text('المدفوع: ${fmt.format(paid)} ريال | المتبقي: ${fmt.format(remain)} ريال'),
           DropdownButtonFormField<String>(initialValue:r['status'] as String,decoration:const InputDecoration(labelText:'حالة الحجز'),items:const ['جديد','مؤكد','قيد التجهيز','تم التسليم','ملغي'].map((s)=>DropdownMenuItem(value:s,child:Text(s))).toList(),onChanged:(v){if(v!=null)status(id,v);}),
+          if(r['status']!='تم التسليم'&&r['status']!='ملغي')TextButton.icon(onPressed:()=>status(id,'تم التسليم'),icon:const Icon(Icons.check_circle_outline),label:const Text('تأكيد التسليم عند الوصول')),
           if(remain>0&&r['status']!='ملغي')TextButton.icon(onPressed:()=>payment(id,remain),icon:const Icon(Icons.payments),label:const Text('تسجيل دفعة')),
         ]));
       }))),
