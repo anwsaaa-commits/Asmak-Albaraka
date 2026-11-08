@@ -68,6 +68,8 @@ jobs:
               raise SystemExit('file_picker compileSdk declaration was not recognized; stopping safely')
           print(f'Updated {changed} file_picker compileSdk declaration(s) to 36')
           PY
+      - name: Install system SQLite library for Linux tests
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-0 libsqlite3-dev
       - name: Analyze Dart code
         run: flutter analyze
       - name: Run tests
