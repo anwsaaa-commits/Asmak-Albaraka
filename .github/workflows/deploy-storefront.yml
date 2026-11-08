@@ -1,8 +1,8 @@
-name: Deploy customer storefront
+name: Deploy customer storefront preview
 
 on:
   push:
-    branches: [main]
+    branches: [preview/storefront]
     paths:
       - "web/**"
       - ".github/workflows/deploy-storefront.yml"
@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "pages-preview"
   cancel-in-progress: true
 
 jobs:
