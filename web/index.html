@@ -1,81 +1,89 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#075b54"><meta name="description" content="أسماك البركة — من البحر إلى مطبخك. أسماك طازجة وحجز سهل.">
-<title>أسماك البركة | احجز الآن</title>
-<style>:root{font-family:Tahoma,Arial,sans-serif;color:#173b38;background:#f4f8f6;--green:#087e70;--deep:#063f3b;--gold:#e5b85c}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f3f7f5}
-header{position:relative;isolation:isolate;overflow:hidden;color:#fff;padding:22px max(5vw,18px) 72px;background:linear-gradient(105deg,rgba(2,37,42,.94),rgba(4,88,83,.72)),url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&q=85') center/cover}
-header:after{content:"";position:absolute;z-index:-1;inset:0 48% 0 0;background:linear-gradient(90deg,transparent,rgba(0,24,29,.15)),url('https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1100&q=85') center/cover;opacity:.88;mask-image:linear-gradient(90deg,#000 65%,transparent)}
-nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:25px;font-weight:900;letter-spacing:.2px}.pill{border:1px solid #ffffff80;border-radius:30px;padding:10px 16px;color:white;text-decoration:none;background:#ffffff12;backdrop-filter:blur(6px)}
-.hero{max-width:1100px;margin:65px auto 0;position:relative;z-index:1}.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.25;margin:0 0 12px;font-weight:900;text-shadow:0 3px 20px #001b1c88}.hero p{color:#e1f4ef;margin:0;line-height:2;font-size:17px;max-width:560px}.hero .tagline{display:inline-block;color:#ffe0a0;font-size:clamp(19px,3vw,26px);font-weight:800;margin-bottom:10px}.hero .actions{margin-top:22px!important}
-main{max-width:1100px;margin:-28px auto 50px;padding:0 16px;position:relative;z-index:2}.section-title{display:flex;justify-content:space-between;align-items:center;margin:28px 0 14px}.section-title h2{margin:0;font-size:23px;color:#124c45}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}.product,.panel{background:white;border:1px solid #e1ebe7;border-radius:20px;overflow:hidden;box-shadow:0 10px 28px #153c3210}.photo{height:165px;background:linear-gradient(135deg,#d9eee8,#f2f7f3);display:grid;place-items:center;color:#6d8e83;font-size:48px}.photo img{transition:transform .35s}.product:hover .photo img{transform:scale(1.04)}.product-body{padding:16px}.product h3{margin:0 0 8px;color:#143f3a}.muted{color:#718780;font-size:13px;line-height:1.7}.price{font-weight:900;color:var(--deep);margin:12px 0;font-size:17px}.offer{color:#9b670b;font-size:12px;font-weight:bold;background:#fff5df;border-radius:20px;padding:5px 9px;display:inline-block;margin-bottom:7px}.actions{display:flex;gap:8px;align-items:center}.btn{border:0;background:linear-gradient(135deg,#087e70,#07584f);color:white;border-radius:12px;padding:12px 16px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px #075b5422}.btn.secondary{background:#eaf3ef;color:var(--deep);box-shadow:none}.btn:disabled{opacity:.5}.qty{width:76px;padding:10px;border:1px solid #d7e4de;border-radius:10px;font:inherit}
-.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.panel{padding:20px}.panel h2{margin:0 0 16px;font-size:21px;color:#124c45}.cart-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf1ef;padding:12px 0;gap:10px}.field{display:grid;gap:7px;margin:13px 0}.field label{font-size:13px;font-weight:bold;color:#315b53}.field input,.field textarea{width:100%;border:1px solid #d7e4de;border-radius:11px;padding:13px;font:inherit;background:#fbfdfc}.field textarea{min-height:78px}.total{font-size:20px;font-weight:900;color:var(--deep);margin:16px 0}.notice{padding:13px;border-radius:12px;background:#edf6f2;color:#315f51;line-height:1.8;font-size:13px}.empty{text-align:center;padding:28px;color:#75877f;background:#f8fbf9;border-radius:12px}footer{text-align:center;color:#75877f;padding:28px 16px;font-size:12px;background:#eaf2ee}
-@media(max-width:720px){header{padding-bottom:60px}header:after{inset:0 25% 0 0;opacity:.32}.hero{margin-top:45px}.hero p{font-size:15px}.layout{grid-template-columns:1fr}.section-title{align-items:flex-start;gap:8px;flex-direction:column}.brand{font-size:21px}}</style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071f2a">
+<meta name="description" content="أسماك البركة — من البحر إلى مطبخك. تونة طازجة، استفسار عن السعر وحجز مباشر عبر واتساب.">
+<title>أسماك البركة | من البحر إلى مطبخك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#09232d;--deep:#071923;--sea:#087f83;--mint:#d9f0e9;--gold:#d9b56b;--cream:#f7f5ef;--white:#fff;--muted:#687d80;--line:#e4e9e4;--shadow:0 22px 60px #07192318}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:"Almarai",Tahoma,Arial,sans-serif}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1200px;padding:0 26px;margin:auto}.logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:21px}.logo-mark{width:43px;height:43px;border:1px solid #d8bd7b;border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:23px;background:#0c2931}.navlinks{display:flex;align-items:center;gap:28px;color:#53696c;font-size:13px}.nav-cta{background:var(--ink);color:white;padding:12px 19px;border-radius:30px;font-size:13px}
+.hero{position:relative;min-height:620px;background:linear-gradient(90deg,rgba(4,22,30,.94) 0%,rgba(4,28,35,.82) 44%,rgba(4,28,35,.14) 100%),url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2200&q=90") center/cover;overflow:hidden;color:white;display:flex;align-items:center}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#061923a8,transparent 45%);pointer-events:none}.hero-inner{position:relative;z-index:1;width:min(1200px,100%);margin:auto;padding:85px 28px 110px}.eyebrow{display:inline-flex;align-items:center;gap:10px;color:#f0d79f;font-size:12px;font-weight:700;letter-spacing:1px}.eyebrow:before{content:"";width:34px;height:1px;background:var(--gold)}h1{font-size:clamp(43px,7vw,82px);line-height:1.17;margin:23px 0 13px;font-weight:800;max-width:650px;letter-spacing:-2px}.hero .slogan{font-size:clamp(19px,2.7vw,27px);font-weight:700;color:#f2d99e;margin:0 0 18px}.hero-copy{max-width:520px;color:#e0e9e6;line-height:2.1;font-size:15px}.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;border:0;border-radius:40px;padding:15px 23px;font-weight:800;font-size:13px;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px)}.btn-gold{background:var(--gold);color:#17252a}.btn-glass{border:1px solid #ffffff75;color:white;background:#ffffff12;backdrop-filter:blur(8px)}.hero-note{margin-top:55px;color:#d2dfda;font-size:11px;display:flex;gap:25px;flex-wrap:wrap}.hero-note span{display:flex;align-items:center;gap:8px}.hero-note b{color:var(--gold);font-size:17px}
+main{max-width:1200px;margin:auto;padding:0 26px}.intro{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;padding:105px 0 75px}.section-kicker{color:var(--sea);font-size:12px;font-weight:800;letter-spacing:1px}.intro h2,.section-heading h2{font-size:clamp(29px,4vw,43px);line-height:1.45;margin:13px 0;color:var(--ink)}.intro p{color:var(--muted);font-size:14px;line-height:2.2;margin:0}.intro-art{position:relative;min-height:300px}.intro-art img{width:82%;height:320px;object-fit:cover;border-radius:6px 90px 6px 6px;box-shadow:var(--shadow)}.seal{position:absolute;left:0;bottom:4px;background:var(--ink);color:white;width:132px;height:132px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:18px;font-size:12px;line-height:1.8;border:5px solid var(--cream)}.seal strong{color:var(--gold);font-size:18px}
+.products{padding:65px 0 100px}.section-heading{text-align:center;margin-bottom:38px}.section-heading p{color:var(--muted);font-size:13px;line-height:1.9}.product-card{max-width:900px;margin:auto;background:white;display:grid;grid-template-columns:1.05fr .95fr;box-shadow:var(--shadow);overflow:hidden;border-radius:8px}.product-photo{min-height:380px;position:relative;background:#dce8e2}.product-photo img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.photo-label{position:absolute;top:20px;right:20px;background:#0a252ce8;color:white;border:1px solid #d9b56b;padding:9px 14px;border-radius:30px;font-size:11px}.product-info{padding:45px 40px;display:flex;flex-direction:column;justify-content:center}.product-info .small{color:var(--sea);font-size:11px;font-weight:800}.product-info h3{font-size:30px;margin:12px 0}.product-info p{color:var(--muted);font-size:13px;line-height:2}.price-hint{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:13px 0 22px;display:flex;align-items:center;justify-content:space-between;gap:10px}.price-hint strong{font-size:15px}.price-hint span{font-size:11px;color:var(--muted)}.product-info .btn{align-self:flex-start}
+.booking{background:#eaf1eb;padding:75px 0}.booking-inner{max-width:950px;margin:auto;padding:0 26px;display:grid;grid-template-columns:.8fr 1.2fr;gap:55px;align-items:start}.booking-copy h2{font-size:34px;line-height:1.5;margin:12px 0}.booking-copy p{color:#607477;font-size:13px;line-height:2}.contact-line{display:flex;align-items:center;gap:12px;margin-top:25px;font-weight:800;direction:ltr;justify-content:flex-end}.contact-line span{direction:rtl}.phone-dot{width:38px;height:38px;background:#d4e8dc;border-radius:50%;display:grid;place-items:center;color:var(--sea)}
+.form-card{background:white;padding:30px;border-radius:8px;box-shadow:0 15px 45px #0b302012}.form-card h3{margin:0 0 8px;font-size:20px}.form-card>p{margin:0 0 20px;color:var(--muted);font-size:11px;line-height:1.8}.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:800;margin-bottom:8px;color:#3b5559}.field input,.field select,.field textarea{width:100%;border:1px solid #dce5df;background:#fbfcfa;border-radius:5px;padding:13px;color:var(--ink);outline:none;font-size:13px}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--sea)}.field textarea{min-height:75px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-card .btn{width:100%;background:#16845c;color:white;margin-top:7px;border-radius:5px}.privacy{font-size:10px!important;color:#84918d!important;text-align:center;margin:12px 0 0!important}
+footer{background:var(--deep);color:white;padding:35px 26px}.footer-inner{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:25px;flex-wrap:wrap}.footer-brand{font-weight:800;font-size:18px}.footer-brand small{display:block;color:#9db2ad;font-size:10px;font-weight:400;margin-top:8px}.footer-links{display:flex;gap:20px;color:#d0dcd7;font-size:12px}.copyright{color:#829894;font-size:10px;width:100%;border-top:1px solid #ffffff1b;padding-top:20px;margin-top:10px}
+.float-wa{position:fixed;bottom:22px;left:22px;z-index:10;width:58px;height:58px;border-radius:50%;background:#20b66b;color:white;display:grid;place-items:center;box-shadow:0 8px 25px #062c2470;font-size:25px;border:3px solid white}
+@media(max-width:760px){.topbar{height:66px;padding:0 17px}.navlinks{display:none}.logo{font-size:17px}.logo-mark{width:37px;height:37px}.hero{min-height:590px;background-position:58% center}.hero-inner{padding:80px 22px 90px}h1{font-size:48px}.hero-copy{font-size:13px}.hero-note{margin-top:38px;gap:14px}.intro{grid-template-columns:1fr;gap:28px;padding:70px 0 50px}.intro-art{min-height:260px}.intro-art img{height:260px;width:88%}.seal{width:112px;height:112px}.products{padding:45px 0 70px}.product-card{grid-template-columns:1fr}.product-photo{min-height:260px}.product-info{padding:28px 24px}.booking-inner{grid-template-columns:1fr;gap:25px}.booking{padding:55px 0}.form-card{padding:23px 18px}.form-grid{grid-template-columns:1fr}.footer-inner{align-items:flex-start;flex-direction:column}.footer-links{flex-wrap:wrap}.float-wa{width:53px;height:53px;bottom:16px;left:16px}}
+</style>
 </head>
 <body>
-<header><nav><div class="brand">🐟 أسماك البركة</div><a class="pill" href="#booking">سلة الحجز (<span id="cart-count">0</span>)</a></nav>
-<div class="hero"><span class="tagline">من البحر إلى مطبخك</span><h1>أسماك البركة</h1><p>طعم البحر الأصيل… أسماك طازجة مختارة بعناية، تقطيع وتجهيز حسب طلبك، وحجز سهل يصلك إلى موعد الاستلام.</p><div class="actions" style="margin-top:18px;flex-wrap:wrap"><a class="pill" href="tel:+967777521058">اتصل بنا: 00967777521058</a><a class="pill" href="https://wa.me/967777521058" target="_blank" rel="noopener noreferrer">واتساب</a></div></div></header>
-<main>
-<div class="section-title"><h2>الأسماك المتوفرة</h2><span class="muted" id="load-state">جاري تحميل الأصناف…</span></div>
-<div class="grid" id="products"><div class="empty">يتم تجهيز قائمة الأسماك…</div></div>
-<div class="layout" id="booking">
-<section class="panel"><h2>بيانات الحجز</h2><div class="notice">إرسال الطلب لا يعني تأكيده النهائي؛ ستصلك متابعة من أسماك البركة بعد مراجعة التوفر.</div>
-<form id="order-form">
-<div class="field"><label for="customer">الاسم الكامل</label><input id="customer" required minlength="2" autocomplete="name"></div>
-<div class="field"><label for="phone">رقم الهاتف</label><input id="phone" required inputmode="tel" autocomplete="tel" minlength="7"></div>
-<div class="field"><label for="pickup">موعد الاستلام</label><input id="pickup" type="datetime-local" required></div>
-<div class="field"><label for="notes">ملاحظات (اختياري)</label><textarea id="notes" maxlength="500"></textarea></div>
-<button class="btn" id="submit" type="submit" style="width:100%">إرسال طلب الحجز</button>
-</form><p id="result" role="status" aria-live="polite"></p></section>
-<aside class="panel"><h2>سلة الحجز</h2><div id="cart"><div class="empty">لم تضف أصنافًا بعد</div></div><div class="total">الإجمالي التقديري: <span id="total">0</span> ر.ي</div><div class="muted">يُعاد احتساب السعر عند إرسال الطلب من قاعدة البيانات لضمان صحة الأسعار.</div></aside>
+<div class="topbar">
+  <a class="logo" href="#"><span class="logo-mark">♧</span><span>أسماك البركة</span></a>
+  <nav class="navlinks"><a href="#about">قصتنا</a><a href="#products">منتجاتنا</a><a href="#booking">اطلب الآن</a></nav>
+  <a class="nav-cta" href="#booking">احجز طلبك <span aria-hidden="true">←</span></a>
 </div>
-</main><footer>© أسماك البركة — منصة الحجز الإلكتروني</footer>
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">اختيار البحر بعناية</div>
+  <h1>أسماك البركة</h1>
+  <p class="slogan">من البحر إلى مطبخك</p>
+  <p class="hero-copy">نختار لك طعم البحر الأصيل بعناية واهتمام. تونة طازجة وتجهيز حسب رغبتك، مع تواصل مباشر وسهل لمعرفة السعر وتأكيد طلبك.</p>
+  <div class="hero-actions"><a class="btn btn-gold" href="#booking">اطلب واحجز الآن <span>←</span></a><a class="btn btn-glass" href="https://wa.me/967777521058" target="_blank" rel="noopener">تواصل عبر واتساب</a></div>
+  <div class="hero-note"><span><b>✦</b> اختيار بعناية</span><span><b>✦</b> تجهيز حسب الطلب</span><span><b>✦</b> تواصل مباشر</span></div>
+ </div>
+</header>
+<main>
+<section class="intro" id="about">
+ <div><div class="section-kicker">حكاية طعم من البحر</div><h2>الجودة تبدأ من الاختيار<br>وتكتمل برضاك</h2><p>في أسماك البركة نهتم بأن تصلك تجربة سهلة وواضحة. اختر الكمية التي تناسبك، وأرسل استفسارك أو طلبك مباشرة عبر واتساب. نؤكد لك السعر والتوفر وموعد الاستلام بالتواصل معك.</p></div>
+ <div class="intro-art"><img src="https://images.unsplash.com/photo-1510130387422-82bed34b37e9?auto=format&fit=crop&w=1000&q=85" alt="أجواء بحرية"><div class="seal"><div><strong>البركة</strong><br>من البحر<br>إلى مطبخك</div></div></div>
+</section>
+<section class="products" id="products">
+ <div class="section-heading"><div class="section-kicker">منتجاتنا</div><h2>اختيارك الطازج يبدأ هنا</h2><p>نبدأ بالتونة، وسنضيف أصنافًا جديدة كلما توفرت.</p></div>
+ <article class="product-card">
+  <div class="product-photo"><img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1200&q=90" alt="شرائح تونة طازجة"><span class="photo-label">اختيار أسماك البركة</span></div>
+  <div class="product-info"><div class="small">متوفر للاستفسار والحجز</div><h3>التونة الطازجة</h3><p>تونة مختارة، مع إمكانية تحديد الكمية وطريقة التقطيع والتجهيز حسب رغبتك.</p><div class="price-hint"><strong>السعر حسب التوفر</strong><span>اسألنا عن سعر الكيلو</span></div><a class="btn btn-gold" href="#booking">اطلب هذه التونة <span>←</span></a></div>
+ </article>
+</section>
+</main>
+<section class="booking" id="booking">
+ <div class="booking-inner">
+  <div class="booking-copy"><div class="section-kicker">خطوة واحدة تفصلك عن طلبك</div><h2>استفسر عن السعر<br>واحجز بسهولة</h2><p>اكتب بياناتك والكمية المطلوبة، وسنفتح لك محادثة واتساب برسالة جاهزة. يتم تأكيد السعر والتوفر وموعد الاستلام مباشرة معك.</p><div class="contact-line"><span>00967777521058</span><span class="phone-dot">☎</span></div></div>
+  <form class="form-card" id="orderForm">
+   <h3>طلب واستفسار</h3><p>املأ البيانات التالية ثم اضغط إرسال عبر واتساب.</p>
+   <div class="field"><label for="name">الاسم</label><input id="name" name="name" placeholder="اكتب اسمك" required maxlength="70"></div>
+   <div class="form-grid">
+    <div class="field"><label for="phone">رقم جوالك</label><input id="phone" name="phone" type="tel" inputmode="tel" placeholder="رقم التواصل" required maxlength="25"></div>
+    <div class="field"><label for="quantity">الكمية بالكيلو</label><input id="quantity" name="quantity" type="number" min="0.25" max="100" step="0.25" placeholder="مثلاً 2" required></div>
+   </div>
+   <div class="field"><label for="cut">طريقة التجهيز</label><select id="cut" name="cut"><option>حسب المتاح / أريد الاستفسار</option><option>شرائح</option><option>قطع متوسطة</option><option>تنظيف وتجهيز</option><option>أخرى - أوضح في الملاحظات</option></select></div>
+   <div class="field"><label for="notes">ملاحظات أو موعد الاستلام المفضل</label><textarea id="notes" name="notes" maxlength="400" placeholder="اكتب أي تفاصيل ترغب بها (اختياري)"></textarea></div>
+   <button class="btn" type="submit">إرسال الطلب عبر واتساب <span>↗</span></button>
+   <p class="privacy">لن يتم حفظ بياناتك في الموقع؛ ستُرسل مباشرة إلى محادثة واتساب الخاصة بأسماك البركة.</p>
+  </form>
+ </div>
+</section>
+<footer><div class="footer-inner"><div class="footer-brand">أسماك البركة<small>من البحر إلى مطبخك</small></div><div class="footer-links"><a href="tel:+967777521058">اتصل بنا</a><a href="https://wa.me/967777521058" target="_blank" rel="noopener">واتساب</a><a href="#products">منتجاتنا</a></div><div class="copyright">© <span id="year"></span> أسماك البركة. جميع الحقوق محفوظة.</div></div></footer>
+<a class="float-wa" href="https://wa.me/967777521058" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">◉</a>
 <script>
-/* Add the Supabase project URL and publishable/anon key after creating the project.
-   The anon key is intended for browser use; NEVER use a service_role key here. */
-const SUPABASE_URL = 'https://qrvphvimsjhnuqcvnfaw.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_1mVWr0OIelzIPW4iAdwLEQ_gCSfpB8X';
-const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
-const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-let products = [], cart = new Map();
-const money = n => new Intl.NumberFormat('ar-YE',{maximumFractionDigits:2}).format(n);
-const el = id => document.getElementById(id);
-function drawCart(){
- let rows=[...cart.values()]; el('cart-count').textContent=rows.reduce((s,x)=>s+x.quantity,0);
- el('cart').innerHTML=rows.length?rows.map(x=>'<div class="cart-row"><span>'+escapeHtml(x.name)+' × '+x.quantity+' كجم</span><b>'+money(x.price*x.quantity)+'</b></div>').join(''):'<div class="empty">لم تضف أصنافًا بعد</div>';
- el('total').textContent=money(rows.reduce((s,x)=>s+x.price*x.quantity,0));
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function drawProducts(){
- el('products').innerHTML=products.length?products.map(p=>{const price=p.is_offer?Number(p.offer_price_per_kg):Number(p.price_per_kg);return '<article class="product"><div class="photo">'+(p.image_url?'<img src="'+escapeHtml(p.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'🐟')+'</div><div class="product-body">'+(p.is_offer?'<div class="offer">عرض خاص</div>':'')+'<h3>'+escapeHtml(p.name)+'</h3><div class="muted">'+escapeHtml(p.description||'سمك طازج من أسماك البركة')+'</div><div class="price">'+money(price)+' ر.ي / كجم</div><div class="actions"><input class="qty" id="q-'+p.id+'" type="number" min="0.25" max="100" step="0.25" value="1" aria-label="الكمية بالكيلو"><button class="btn" data-add="'+p.id+'">أضف للسلة</button></div></div></article>';}).join(''):'<div class="empty">لا توجد أصناف منشورة حاليًا.</div>';
- document.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>{const p=products.find(x=>x.id===Number(b.dataset.add));const q=Number(el('q-'+p.id).value);if(!Number.isFinite(q)||q<=0||q>100)return;const current=cart.get(p.id);const nextQuantity=(current?.quantity||0)+q;if(nextQuantity>100){el('result').textContent='الحد الأقصى للصنف الواحد 100 كجم.';return;}cart.set(p.id,{id:p.id,name:p.name,price:p.is_offer?Number(p.offer_price_per_kg):Number(p.price_per_kg),quantity:nextQuantity});el('result').textContent='';drawCart();}));
-}
-async function loadProducts(){
- if(!db){el('load-state').textContent='بانتظار إعداد قاعدة البيانات السحابية';el('products').innerHTML='<div class="empty">واجهة المتجر جاهزة. يلزم ربط مشروع Supabase ونشر أصنافك وأسعارك لعرض المنتجات والحجوزات الفعلية.</div>';return;}
- const {data,error}=await db.from('cloud_fish_products').select('id,name,description,image_url,price_per_kg,is_active,is_offer,offer_price_per_kg').eq('is_active',true).order('name');
- if(error){el('load-state').textContent='تعذر تحميل الأصناف';return;}products=data||[];el('load-state').textContent=products.length+' صنف';drawProducts();
-}
-el('order-form').addEventListener('submit',async e=>{
- e.preventDefault();if(!cart.size){el('result').textContent='أضف صنفًا واحدًا على الأقل.';return;}
- if(!db){el('result').textContent='لم يتم ربط قاعدة البيانات بعد؛ لم يُرسل أي طلب.';return;}
- const button=el('submit');button.disabled=true;button.textContent='جارٍ إرسال الطلب…';el('result').textContent='';
- const items=[...cart.values()].map(x=>({product_id:x.id,quantity_kg:x.quantity}));
- const {data,error}=await db.rpc('place_customer_order',{p_customer_name:el('customer').value.trim(),p_customer_phone:el('phone').value.trim(),p_pickup_at:new Date(el('pickup').value).toISOString(),p_notes:el('notes').value.trim(),p_items:items});
- button.disabled=false;button.textContent='إرسال طلب الحجز';
- if(error){el('result').textContent='تعذر إرسال الطلب: '+error.message;return;}
- el('result').innerHTML='<div class="notice">تم استلام طلبك بنجاح. رقم الطلب: <b>'+escapeHtml(data.order_code)+'</b><br>الإجمالي: '+money(data.total)+' ر.ي — الحالة: جديد<br>احتفظ برقم الطلب حتى نؤكد لك موعد الاستلام.</div>';
- cart.clear();drawCart();
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('orderForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const name=document.getElementById('name').value.trim();
+ const phone=document.getElementById('phone').value.trim();
+ const quantity=document.getElementById('quantity').value;
+ const cut=document.getElementById('cut').value;
+ const notes=document.getElementById('notes').value.trim();
+ if(!name||!phone||!quantity||Number(quantity)<=0){return;}
+ const lines=['السلام عليكم، أرغب بالاستفسار والحجز من متجر أسماك البركة.','الاسم: '+name,'رقم الجوال: '+phone,'الصنف: التونة الطازجة','الكمية: '+quantity+' كجم','طريقة التجهيز: '+cut,'الملاحظات / موعد الاستلام: '+(notes||'لا يوجد'),'أرجو إفادتي بسعر الكيلو والتوفر وتأكيد الطلب.'];
+ window.open('https://wa.me/967777521058?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');
 });
-function setPickupMinimum(){
- const input=el('pickup');
- const now=new Date();
- const local=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
- input.min=local;
-}
-setPickupMinimum();
-loadProducts();
-</script></body></html>
+</script>
+</body>
+</html>
