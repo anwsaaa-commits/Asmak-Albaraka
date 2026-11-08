@@ -159,7 +159,7 @@ begin
     if not found then
       raise exception 'أحد أصناف السمك لم يعد متاحاً';
     end if;
-    if coalesce(v_item->>'quantity_kg','') !~ '^[0-9]+(\\.[0-9]{1,3})?$' then
+    if coalesce(v_item->>'quantity_kg','') !~ '^[0-9]+(\.[0-9]{1,3})?$' then
       raise exception 'الكمية غير صحيحة';
     end if;
     v_qty := (v_item->>'quantity_kg')::numeric;
