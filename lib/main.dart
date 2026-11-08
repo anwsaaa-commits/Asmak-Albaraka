@@ -14,10 +14,13 @@ import 'screens/reports_screen.dart';
 import 'screens/backup_screen.dart';
 import 'screens/debts_screen.dart';
 
+bool _cloudReady = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDatabase.instance.database;
   await CloudConfig.initialize();
+  _cloudReady = true;
   runApp(const AsmakAlbarakaApp());
 }
 
@@ -53,12 +56,14 @@ class AsmakAlbarakaApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         ),
-        home: StreamBuilder<AuthState>(
-          stream: CloudConfig.client.auth.onAuthStateChange,
-          builder: (context, snapshot) => CloudConfig.client.auth.currentSession == null
-              ? const AdminLoginScreen()
-              : const HomePage(),
-        ),
+        home: !_cloudReady
+            ? const HomePage()
+            : StreamBuilder<AuthState>(
+                stream: CloudConfig.client.auth.onAuthStateChange,
+                builder: (context, snapshot) => CloudConfig.client.auth.currentSession == null
+                    ? const AdminLoginScreen()
+                    : const HomePage(),
+              ),
       );
 }
 
