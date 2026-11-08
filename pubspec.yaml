@@ -18,12 +18,14 @@ dependencies:
   file_picker: ^8.1.7
   share_plus: ^10.1.4
   path_provider: ^2.1.5
+  supabase_flutter: ^2.8.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  sqflite_common_ffi: ^2.3.6
+  sqflite_common_ffi: ">=2.3.7 <2.4.0"
+  sqlite3: ^2.9.4
 
 flutter:
   uses-material-design: true

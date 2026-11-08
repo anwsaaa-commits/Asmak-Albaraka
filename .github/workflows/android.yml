@@ -68,10 +68,29 @@ jobs:
               raise SystemExit('file_picker compileSdk declaration was not recognized; stopping safely')
           print(f'Updated {changed} file_picker compileSdk declaration(s) to 36')
           PY
+      - name: Install system SQLite library for Linux tests
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-0 libsqlite3-dev
       - name: Analyze Dart code
         run: flutter analyze
-      - name: Run tests
-        run: flutter test
+      - name: Run tests with system SQLite on Linux
+        run: |
+          cp pubspec.yaml /tmp/pubspec.yaml.ci-backup
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('pubspec.yaml')
+          s = p.read_text()
+          if '\nhooks:\n' in s:
+              raise SystemExit('pubspec.yaml already contains hooks; refusing to overwrite existing configuration')
+          s += '\n hooks:\n'
+          s += '  user_defines:\n'
+          s += '    sqlite3:\n'
+          s += '      source: system\n'
+          p.write_text(s.replace('\n hooks:\n', '\nhooks:\n'))
+          PY
+          flutter pub get
+          flutter test
+          cp /tmp/pubspec.yaml.ci-backup pubspec.yaml
+          flutter pub get
       - name: Build debug test APK only
         run: flutter build apk --debug
       - name: Upload debug test APK

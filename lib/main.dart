@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'services/cloud_config.dart';
+import 'screens/admin_login_screen.dart';
+import 'screens/cloud_orders_screen.dart';
+import 'screens/cloud_products_screen.dart';
 import 'data/app_database.dart';
 import 'screens/fish_screen.dart';
 import 'screens/reservations_screen.dart';
@@ -9,9 +14,13 @@ import 'screens/reports_screen.dart';
 import 'screens/backup_screen.dart';
 import 'screens/debts_screen.dart';
 
+bool _cloudReady = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDatabase.instance.database;
+  await CloudConfig.initialize();
+  _cloudReady = true;
   runApp(const AsmakAlbarakaApp());
 }
 
@@ -47,7 +56,14 @@ class AsmakAlbarakaApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         ),
-        home: const HomePage(),
+        home: !_cloudReady
+            ? const HomePage()
+            : StreamBuilder<AuthState>(
+                stream: CloudConfig.client.auth.onAuthStateChange,
+                builder: (context, snapshot) => CloudConfig.client.auth.currentSession == null
+                    ? const AdminLoginScreen()
+                    : const HomePage(),
+              ),
       );
 }
 
@@ -90,7 +106,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('أسماك البركة', style: TextStyle(fontWeight: FontWeight.bold)),
-          actions: [IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh), tooltip: 'تحديث')],
+          actions: [
+            IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh), tooltip: 'تحديث'),
+            IconButton(onPressed: () => CloudConfig.client.auth.signOut(), icon: const Icon(Icons.logout), tooltip: 'تسجيل الخروج'),
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
@@ -106,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                 child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('مرحباً بك', style: TextStyle(color: Colors.white70, fontSize: 15)),
                   SizedBox(height: 8),
-                  Text('إدارة حجوزات الأسماك بسهولة', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
+                  Text('احجز الآن', style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
                   Text('كل بياناتك محفوظة على جهازك وتعمل دون إنترنت', style: TextStyle(color: Colors.white70)),
                 ]),
@@ -124,7 +143,10 @@ class _HomePageState extends State<HomePage> {
               const Text('إدارة المحل', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               _MenuTile(icon: Icons.add_shopping_cart, title: 'حجز جديد', subtitle: 'تسجيل طلب عميل ووزن السمك', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
+              _MenuTile(icon: Icons.local_offer, title: 'العروض وبسعر مناسب', subtitle: 'حجوزات مستقلة بأسعار خاصة', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen(reservationType: 'عرض'))).then((_) => _refresh())),
               _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
+              _MenuTile(icon: Icons.cloud_download, title: 'حجوزات المتجر الإلكتروني', subtitle: 'استقبال طلبات الزبائن من الموقع وتحديث حالتها', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CloudOrdersScreen()))),
+              _MenuTile(icon: Icons.cloud, title: 'أصناف المتجر الإلكتروني', subtitle: 'إضافة الأسماك والأسعار والعروض التي تظهر للزبائن', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CloudProductsScreen()))),
               _MenuTile(icon: Icons.set_meal, title: 'الأسماك والأسعار', subtitle: 'إضافة الأصناف وتعديل سعر الكيلو', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FishScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.payments, title: 'المدفوعات والديون', subtitle: 'تسجيل الدفعات ومراجعة المتبقي', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DebtsScreen())).then((_) => _refresh())),
