@@ -32,7 +32,7 @@ jobs:
           import re
           p = Path('android/app/build.gradle.kts')
           s = p.read_text()
-          s, count = re.subn(r'compileSdk\s*=\s*[^\n]+', 'compileSdk = 36', s, count=1)
+          s, count = re.subn(r'compileSdk\\s*=\\s*[^\\n]+', 'compileSdk = 36', s, count=1)
           if count != 1:
               raise SystemExit('Could not locate compileSdk setting in generated Android Gradle file')
           p.write_text(s)
@@ -54,8 +54,8 @@ jobs:
           for path in files:
               source = path.read_text()
               updated, count = re.subn(
-                  r'(?m)^(\s*compileSdk(?:Version)?\s*(?:=\s*)?).+$',
-                  r'\g<1>36',
+                  r'(?m)^(\\s*compileSdk(?:Version)?\\s*(?:=\\s*)?).+$',
+                  r'\\g<1>36',
                   source
               )
               if count:
@@ -72,8 +72,25 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libsqlite3-0 libsqlite3-dev
       - name: Analyze Dart code
         run: flutter analyze
-      - name: Run tests
-        run: flutter test
+      - name: Run tests with system SQLite on Linux
+        run: |
+          cp pubspec.yaml /tmp/pubspec.yaml.ci-backup
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('pubspec.yaml')
+          s = p.read_text()
+          if '\nhooks:\n' in s:
+              raise SystemExit('pubspec.yaml already contains hooks; refusing to overwrite existing configuration')
+          s += '\n hooks:\n'
+          s += '  user_defines:\n'
+          s += '    sqlite3:\n'
+          s += '      source: system\n'
+          p.write_text(s.replace('\n hooks:\n', '\nhooks:\n'))
+          PY
+          flutter pub get
+          flutter test
+          cp /tmp/pubspec.yaml.ci-backup pubspec.yaml
+          flutter pub get
       - name: Build debug test APK only
         run: flutter build apk --debug
       - name: Upload debug test APK
