@@ -9,7 +9,7 @@ class AppDatabase {
   Future<Database> get database async {
     if (_db != null) return _db!;
     final root = await getDatabasesPath();
-    _db = await openDatabase(p.join(root, 'asmak_albaraka.db'), version: 1,
+    _db = await openDatabase(p.join(root, 'asmak_albaraka.db'), version: 2,
       onConfigure: (db) async => db.execute('PRAGMA foreign_keys = ON'),
       onCreate: (db, version) async {
         await db.execute('CREATE TABLE fish_types (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, price_per_kg REAL NOT NULL CHECK(price_per_kg >= 0), active INTEGER NOT NULL DEFAULT 1)');
@@ -19,6 +19,12 @@ class AppDatabase {
         await db.execute("CREATE TABLE payments (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL, amount REAL NOT NULL CHECK(amount > 0), paid_at TEXT NOT NULL, note TEXT NOT NULL DEFAULT '', FOREIGN KEY(reservation_id) REFERENCES reservations(id) ON DELETE CASCADE)");
         await db.execute('CREATE INDEX idx_reservations_pickup ON reservations(pickup_at)');
         await db.execute('CREATE INDEX idx_reservations_phone ON reservations(customer_phone)');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute("ALTER TABLE reservations ADD COLUMN reservation_type TEXT NOT NULL DEFAULT 'عادي'");
+          await db.execute("ALTER TABLE reservations ADD COLUMN delivered_at TEXT");
+        }
       });
     return _db!;
   }
@@ -38,7 +44,7 @@ class AppDatabase {
   }
   Future<int> archiveFish(int id) async => (await database).update('fish_types', {'active':0}, where:'id=?', whereArgs:[id]);
 
-  Future<int> createReservation({required String customerName, required String phone, required DateTime pickupAt, required List<Map<String,Object?>> items, required double paid, String notes = ''}) async {
+  Future<int> createReservation({required String customerName, required String phone, required DateTime pickupAt, required List<Map<String,Object?>> items, required double paid, String notes = '', String reservationType = 'عادي'}) async {
     if (items.isEmpty || customerName.trim().isEmpty) throw ArgumentError('أدخل اسم العميل وصنفًا واحدًا على الأقل');
     final total = items.fold<double>(0, (sum, x) => sum + (x['quantity_kg'] as num).toDouble() * (x['unit_price'] as num).toDouble());
     if (paid < 0 || paid > total) throw ArgumentError('تحقق من المبلغ المدفوع');
@@ -48,7 +54,7 @@ class AppDatabase {
       final found = phoneValue.isEmpty ? <Map<String,Object?>>[] : await txn.query('customers', where:'phone=?', whereArgs:[phoneValue], limit:1);
       final customerId = found.isNotEmpty ? found.first['id'] as int : await txn.insert('customers', {'name':customerName.trim(),'phone':phoneValue});
       if (found.isNotEmpty) await txn.update('customers', {'name':customerName.trim()}, where:'id=?', whereArgs:[customerId]);
-      final id = await txn.insert('reservations', {'customer_id':customerId,'customer_name':customerName.trim(),'customer_phone':phoneValue,'pickup_at':pickupAt.toIso8601String(),'status':'جديد','total':total,'paid':paid,'notes':notes.trim(),'created_at':DateTime.now().toIso8601String()});
+      final id = await txn.insert('reservations', {'customer_id':customerId,'customer_name':customerName.trim(),'customer_phone':phoneValue,'pickup_at':pickupAt.toIso8601String(),'status':'جديد','reservation_type':reservationType,'total':total,'paid':paid,'notes':notes.trim(),'created_at':DateTime.now().toIso8601String()});
       for (final x in items) {
         final q = (x['quantity_kg'] as num).toDouble();
         final price = (x['unit_price'] as num).toDouble();
@@ -59,9 +65,12 @@ class AppDatabase {
     });
   }
 
-  Future<List<Map<String,Object?>>> getReservations({String search = ''}) async {
+  Future<List<Map<String,Object?>>> getReservations({String search = '', String? reservationType}) async {
     final q = search.trim();
-    return (await database).query('reservations', where:q.isEmpty?null:'customer_name LIKE ? OR customer_phone LIKE ?', whereArgs:q.isEmpty?null:['%$q%','%$q%'], orderBy:'pickup_at DESC');
+    final clauses = <String>[]; final args = <Object?>[];
+    if (q.isNotEmpty) { clauses.add('(customer_name LIKE ? OR customer_phone LIKE ?)'); args.addAll(['%$q%','%$q%']); }
+    if (reservationType != null) { clauses.add('reservation_type=?'); args.add(reservationType); }
+    return (await database).query('reservations', where:clauses.isEmpty?null:clauses.join(' AND '), whereArgs:args.isEmpty?null:args, orderBy:'pickup_at DESC');
   }
   Future<List<Map<String,Object?>>> getReservationItems(int id) async => (await database).query('reservation_items', where:'reservation_id=?', whereArgs:[id], orderBy:'id');
 
@@ -70,7 +79,7 @@ class AppDatabase {
   Future<void> updateStatus(int id, String status) async {
     const allowed = ['جديد','مؤكد','قيد التجهيز','تم التسليم','ملغي'];
     if (!allowed.contains(status)) throw ArgumentError('حالة غير صحيحة');
-    await (await database).update('reservations', {'status':status}, where:'id=?', whereArgs:[id]);
+    await (await database).update('reservations', {'status':status, if(status == 'تم التسليم') 'delivered_at':DateTime.now().toIso8601String()}, where:'id=?', whereArgs:[id]);
   }
   Future<void> addPayment(int id, double amount) async {
     if (amount <= 0) throw ArgumentError('المبلغ يجب أن يكون أكبر من صفر');
