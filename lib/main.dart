@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'services/cloud_config.dart';
 import 'screens/admin_login_screen.dart';
 import 'screens/cloud_orders_screen.dart';
+import 'screens/cloud_products_screen.dart';
 import 'data/app_database.dart';
 import 'screens/fish_screen.dart';
 import 'screens/reservations_screen.dart';
@@ -140,6 +141,7 @@ class _HomePageState extends State<HomePage> {
               _MenuTile(icon: Icons.local_offer, title: 'العروض وبسعر مناسب', subtitle: 'حجوزات مستقلة بأسعار خاصة', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen(reservationType: 'عرض'))).then((_) => _refresh())),
               _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.cloud_download, title: 'حجوزات المتجر الإلكتروني', subtitle: 'استقبال طلبات الزبائن من الموقع وتحديث حالتها', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CloudOrdersScreen()))),
+              _MenuTile(icon: Icons.cloud, title: 'أصناف المتجر الإلكتروني', subtitle: 'إضافة الأسماك والأسعار والعروض التي تظهر للزبائن', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CloudProductsScreen()))),
               _MenuTile(icon: Icons.set_meal, title: 'الأسماك والأسعار', subtitle: 'إضافة الأصناف وتعديل سعر الكيلو', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FishScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.payments, title: 'المدفوعات والديون', subtitle: 'تسجيل الدفعات ومراجعة المتبقي', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DebtsScreen())).then((_) => _refresh())),
