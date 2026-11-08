@@ -137,7 +137,7 @@ begin
   if length(coalesce(p_notes,'')) > 500 then
     raise exception 'الملاحظات طويلة جداً';
   end if;
-  if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) < 1 or jsonb_array_length(p_items) > 30 then
+  if jsonb_typeof(p_items) is distinct from 'array' or jsonb_array_length(p_items) < 1 or jsonb_array_length(p_items) > 30 then
     raise exception 'السلة غير صحيحة';
   end if;
 
@@ -181,6 +181,6 @@ $$;
 revoke all on function public.place_customer_order(text,text,timestamptz,text,jsonb) from public;
 grant execute on function public.place_customer_order(text,text,timestamptz,text,jsonb) to anon, authenticated;
 revoke all on function public.is_store_admin() from public;
-grant execute on function public.is_store_admin() to authenticated;
+grant execute on function public.is_store_admin() to anon, authenticated;
 
 -- No sample fish or customer data are inserted. Add only the shop's real catalog.
