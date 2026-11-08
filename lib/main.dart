@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'services/cloud_config.dart';
+import 'screens/admin_login_screen.dart';
+import 'screens/cloud_orders_screen.dart';
 import 'data/app_database.dart';
 import 'screens/fish_screen.dart';
 import 'screens/reservations_screen.dart';
@@ -12,6 +16,7 @@ import 'screens/debts_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDatabase.instance.database;
+  await CloudConfig.initialize();
   runApp(const AsmakAlbarakaApp());
 }
 
@@ -47,7 +52,12 @@ class AsmakAlbarakaApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         ),
-        home: const HomePage(),
+        home: StreamBuilder<AuthState>(
+          stream: CloudConfig.client.auth.onAuthStateChange,
+          builder: (context, snapshot) => CloudConfig.client.auth.currentSession == null
+              ? const AdminLoginScreen()
+              : const HomePage(),
+        ),
       );
 }
 
@@ -90,7 +100,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('أسماك البركة', style: TextStyle(fontWeight: FontWeight.bold)),
-          actions: [IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh), tooltip: 'تحديث')],
+          actions: [
+            IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh), tooltip: 'تحديث'),
+            IconButton(onPressed: () => CloudConfig.client.auth.signOut(), icon: const Icon(Icons.logout), tooltip: 'تسجيل الخروج'),
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
@@ -126,6 +139,7 @@ class _HomePageState extends State<HomePage> {
               _MenuTile(icon: Icons.add_shopping_cart, title: 'حجز جديد', subtitle: 'تسجيل طلب عميل ووزن السمك', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.local_offer, title: 'العروض وبسعر مناسب', subtitle: 'حجوزات مستقلة بأسعار خاصة', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen(reservationType: 'عرض'))).then((_) => _refresh())),
               _MenuTile(icon: Icons.list_alt, title: 'الحجوزات', subtitle: 'متابعة حالة الطلبات والاستلام', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReservationsScreen())).then((_) => _refresh())),
+              _MenuTile(icon: Icons.cloud_download, title: 'حجوزات المتجر الإلكتروني', subtitle: 'استقبال طلبات الزبائن من الموقع وتحديث حالتها', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CloudOrdersScreen()))),
               _MenuTile(icon: Icons.set_meal, title: 'الأسماك والأسعار', subtitle: 'إضافة الأصناف وتعديل سعر الكيلو', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FishScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.people_alt, title: 'العملاء', subtitle: 'بيانات العملاء وأرقام التواصل', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersScreen())).then((_) => _refresh())),
               _MenuTile(icon: Icons.payments, title: 'المدفوعات والديون', subtitle: 'تسجيل الدفعات ومراجعة المتبقي', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DebtsScreen())).then((_) => _refresh())),
