@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101820"><meta name="description" content="احجز سمك التونة (تمـد) من تونة بلس بسهولة عبر واتساب.">
+<title>تونة بلس | حجز التونة</title>
+<style>
+:root{--gold:#e7b84e;--ink:#101820;--muted:#aeb8c2}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#263747,#101820 58%);color:#fff;font-family:Tahoma,Arial,sans-serif;min-height:100vh;padding:22px 14px}.wrap{max-width:520px;margin:auto}.brand{text-align:center;padding:22px 10px 16px}.fish{font-size:58px;filter:drop-shadow(0 8px 16px #0008)}h1{margin:6px 0;color:var(--gold);font-size:36px} .en{letter-spacing:3px;color:#fff;font-size:14px}.tag{color:var(--muted);margin-top:12px}.card{background:#17232e;border:1px solid #ffffff20;border-radius:22px;padding:22px;box-shadow:0 18px 45px #0005}h2{font-size:21px;margin:0 0 7px}.hint{color:var(--muted);font-size:13px;margin:0 0 20px}label{display:block;margin:14px 0 7px;font-size:14px;color:#f4d58b}input,select,textarea{width:100%;border:1px solid #40515f;border-radius:12px;background:#0f1922;color:#fff;padding:14px;font:inherit;font-size:15px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--gold)}textarea{min-height:88px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{width:100%;margin-top:20px;border:0;border-radius:14px;background:#159b59;color:white;padding:16px;font-size:17px;font-weight:bold;cursor:pointer}.btn:active{transform:scale(.99)}.note{text-align:center;color:var(--muted);font-size:12px;line-height:1.8;margin:16px 8px}.foot{text-align:center;color:#82909c;font-size:11px;margin:18px}
+</style></head>
+<body><main class="wrap">
+<header class="brand"><div class="fish" aria-hidden="true">🐟</div><h1>تونة بلس</h1><div class="en">TUNA PLUS</div><p class="tag">بيع سمك التونة (تمـد)</p></header>
+<section class="card"><h2>احجز طلبك الآن</h2><p class="hint">املأ البيانات التالية، وسنفتح واتساب برسالة جاهزة لإرسال طلبك.</p>
+<form id="booking">
+<label for="customer">اسم العميل</label><input id="customer" name="customer" autocomplete="name" required placeholder="اكتب اسمك">
+<div class="grid"><div><label for="phone">رقم التواصل</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel" required placeholder="رقم هاتفك"></div><div><label for="weight">الكمية المطلوبة</label><input id="weight" name="weight" type="number" min="1" step="0.5" required placeholder="مثلاً 5"></div></div>
+<label for="unit">وحدة الكمية</label><select id="unit" name="unit"><option value="كيلو">كيلو</option><option value="حبة">حبة</option><option value="كمية يُحددها المتجر">أخرى / أريد الاستفسار</option></select>
+<label for="pickup">طريقة الاستلام</label><select id="pickup" name="pickup"><option>استلام من المحل</option><option>أرغب بمعرفة إمكانية التوصيل</option></select>
+<label for="notes">ملاحظات إضافية (اختياري)</label><textarea id="notes" name="notes" placeholder="أي تفاصيل ترغب بإضافتها"></textarea>
+<button class="btn" type="submit">إرسال طلب الحجز عبر واتساب　➜</button></form></section>
+<p class="note">لن يتم تأكيد الحجز تلقائياً. سيقوم فريق تونة بلس بمراجعة طلبك والتواصل معك لتأكيد التوفر والسعر.</p><footer class="foot">© تونة بلس - Tuna Plus</footer></main>
+<script>
+document.getElementById('booking').addEventListener('submit',function(e){e.preventDefault();const f=new FormData(this);const msg=['طلب حجز جديد - تونة بلس 🐟','اسم العميل: '+f.get('customer'),'رقم التواصل: '+f.get('phone'),'المنتج: سمك التونة (تمـد)','الكمية: '+f.get('weight')+' '+f.get('unit'),'الاستلام: '+f.get('pickup'),'ملاحظات: '+(f.get('notes')||'لا توجد')].join('\n');const url='https://wa.me/967777521058?text='+encodeURIComponent(msg);window.location.href=url;});
+</script></body></html>
